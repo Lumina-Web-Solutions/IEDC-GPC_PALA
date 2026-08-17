@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "IEDC | Government Polytechnic College",
+  title: "IEDC | Government Polytechnic College, Pala",
   description: "Innovation and Entrepreneurship Development Centre",
 };
 
