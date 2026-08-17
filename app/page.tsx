@@ -27,7 +27,7 @@ export default function Home() {
           className="mb-8"
         >
           <img 
-            src="/Logo.png" 
+            src="/favicon.ico" 
             alt="College Logo" 
             className="w-24 h-24 object-contain drop-shadow-sm"
             onError={(e) => {
