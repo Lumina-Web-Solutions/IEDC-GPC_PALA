@@ -1,6 +1,7 @@
 'use client';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 
 export default function Navbar() {
@@ -24,11 +25,31 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-4 flex justify-between items-center">
         {/* Logo Section */}
-        <Link href="/" className="flex items-center space-x-2">
-          <div className="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center text-white font-bold tracking-wider">
-            IEDC
-          </div>
-        </Link>
+<Link href="/" className="flex items-center space-x-3 group">
+  <div className="relative w-12 h-12 md:w-14 md:h-14">
+    <Image 
+      src="/logo.png" 
+      alt="IEDC GPC Pala Logo" 
+      fill
+      className="object-contain transition-transform duration-300 group-hover:scale-105"
+      priority
+    />
+  </div>
+  <div className="flex items-center ml-2 md:ml-3">
+  {/* The Serif Font for IEDC */}
+  <span className="font-serif text-xl md:text-2xl text-gray-900 leading-none">
+    IEDC
+  </span>
+  
+  {/* The Vertical Divider Line (Hidden on Mobile) */}
+  <span className="hidden md:inline-block mx-3 md:mx-4 w-px h-6 bg-gray-300"></span>
+  
+  {/* The Tiny, Spaced-Out Sans-Serif Font for GPC PALA (Hidden on Mobile) */}
+  <span className="hidden md:inline-block font-sans text-[10px] md:text-xs font-bold tracking-[0.25em] text-gray-500 uppercase leading-none mt-1">
+    GPC PALA
+  </span>
+</div>
+</Link>
 
         {/* Desktop Links */}
         <div className="hidden md:flex space-x-8">
