@@ -37,20 +37,22 @@ export default function Team() {
   const faculty = members.filter(member => member.category === 'Faculty');
   const students = members.filter(member => member.category === 'Student');
 
-  // Reusable Profile Card Component
-  const ProfileCard = ({ member }) => (
-    <div className="flex flex-col items-center text-center group">
-      <div className="relative w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden mb-6 bg-gray-100 shadow-md">
-        <Image 
-          src={member.image_url || "/profile-placeholder.jpg"} 
-          alt={member.name} 
-          fill 
-          className="object-cover transition-transform duration-500 group-hover:scale-110" 
-        />
-      </div>
-      <h4 className="text-xl font-serif text-gray-900 mb-1">{member.name}</h4>
-      <p className="text-sm font-sans tracking-wide text-gray-500 uppercase">{member.role}</p>
+  // Inside Team.jsx
+
+const ProfileCard = ({ member }) => (
+  <div className="flex flex-col items-center text-center group">
+    {/* Changed w-40 h-40 to w-28 h-28 for mobile */}
+    <div className="relative w-28 h-28 md:w-48 md:h-48 rounded-full overflow-hidden mb-4 md:mb-6 bg-gray-100 shadow-md">
+      <Image 
+        src={member.image_url || "/profile-placeholder.jpg"} 
+        alt={member.name} 
+        fill 
+        className="object-cover transition-transform duration-500 group-hover:scale-110" 
+      />
     </div>
+    <h4 className="text-lg md:text-xl font-serif text-gray-900 mb-1 leading-tight">{member.name}</h4>
+    <p className="text-xs md:text-sm font-sans tracking-wide text-gray-500 uppercase">{member.role}</p>
+  </div>
   );
 
   return (

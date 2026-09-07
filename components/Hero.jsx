@@ -25,30 +25,32 @@ export default function Hero() {
         animate="show"
         className="max-w-7xl mx-auto w-full"
       >
-        {/* Main Typography */}
-        <motion.div variants={item} className="max-w-5xl mb-12">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif text-gray-900 leading-[1.1] tracking-tight mb-6">
-            Innovation and <br />
-            Entrepreneurship <br />
-            Development Centre.
-          </h1>
-          <p className="text-lg md:text-xl text-gray-600 font-sans tracking-wide">
-            Government Polytechnic College, Pala
-          </p>
-        </motion.div>
+       {/* Inside Hero.jsx */}
 
-        {/* IEDC Image */}
-        <motion.div variants={item} className="w-full h-[400px] md:h-[600px] relative rounded-2xl overflow-hidden mb-16 shadow-2xl">
-          {/* Ensure you place an image named hero-bg.jpg in your public folder */}
-          <div className="absolute inset-0 bg-gray-300 animate-pulse" /> {/* Placeholder background */}
-          <Image 
-            src="/hero-bg.png" // Change this to your actual image later
-            alt="IEDC at GPC Pala"
-            fill
-            className="object-cover relative z-10"
-            priority
-          />
-        </motion.div>
+{/* Main Typography */}
+<motion.div variants={item} className="max-w-5xl mx-auto mb-8 md:mb-12 text-center px-2 md:px-0">
+  {/* Changed text-5xl to text-4xl for mobile, reduced bottom margin */}
+  <h1 className="text-4xl md:text-7xl lg:text-8xl font-serif text-gray-900 leading-[1.1] tracking-tight mb-4 md:mb-6">
+    Innovation and <br />
+    Entrepreneurship <br />
+    Development Centre.
+  </h1>
+  <p className="text-base md:text-xl text-gray-600 font-sans tracking-wide">
+    Government Polytechnic College, Pala
+  </p>
+</motion.div>
+
+{/* IEDC Image */}
+<motion.div variants={item} className="w-full h-[300px] md:h-[600px] relative rounded-2xl overflow-hidden mb-12 md:mb-16 shadow-2xl">
+  <div className="absolute inset-0 bg-gray-300 animate-pulse" />
+  <Image 
+    src="/hero-bg.png" 
+    alt="IEDC at GPC Pala"
+    fill
+    className="object-cover relative z-10"
+    priority
+  />
+</motion.div>
 
         {/* Famous Quote */}
         <motion.div variants={item} className="max-w-3xl mx-auto text-center">
