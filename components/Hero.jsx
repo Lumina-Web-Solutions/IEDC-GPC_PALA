@@ -1,7 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import KineticHero from './KineticHero';
+
 
 export default function Hero() {
   // Stagger animation variants for smooth reveals
