@@ -40,17 +40,22 @@ export default function Hero() {
   </p>
 </motion.div>
 
-{/* IEDC Image */}
-<motion.div variants={item} className="w-full h-[300px] md:h-[600px] relative rounded-2xl overflow-hidden mb-12 md:mb-16 shadow-2xl">
-  <div className="absolute inset-0 bg-gray-300 animate-pulse" />
-  <Image 
-    src="/heron.png" 
-    alt="IEDC at GPC Pala"
-    fill
-    className="object-cover relative z-10"
-    priority
-  />
-</motion.div>
+    {/* IEDC Video */}
+    <motion.div variants={item} className="w-full h-[300px] md:h-[600px] relative rounded-2xl overflow-hidden mb-12 md:mb-16 shadow-2xl bg-gray-900">
+      {/* Loading pulse effect before video starts playing */}
+      <div className="absolute inset-0 bg-gray-800 animate-pulse" />
+      
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="object-cover w-full h-full relative z-10"
+      >
+        <source src="/hero-video.mp4" type="video/mp4" />
+      </video>
+    </motion.div>
+
 
         {/* Famous Quote */}
         <motion.div variants={item} className="max-w-3xl mx-auto text-center">
