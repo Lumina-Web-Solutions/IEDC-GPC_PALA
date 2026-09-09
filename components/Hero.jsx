@@ -44,7 +44,7 @@ export default function Hero() {
 <motion.div variants={item} className="w-full h-[300px] md:h-[600px] relative rounded-2xl overflow-hidden mb-12 md:mb-16 shadow-2xl">
   <div className="absolute inset-0 bg-gray-300 animate-pulse" />
   <Image 
-    src="/hero-bg.png" 
+    src="/heron.png" 
     alt="IEDC at GPC Pala"
     fill
     className="object-cover relative z-10"
