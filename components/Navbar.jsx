@@ -28,7 +28,7 @@ export default function Navbar() {
 <Link href="/" className="flex items-center space-x-3 group">
   <div className="relative w-12 h-12 md:w-14 md:h-14">
     <Image 
-      src="/Logo.png" 
+      src="/LogoN.png" 
       alt="IEDC GPC Pala Logo" 
       fill
       className="object-contain transition-transform duration-300 group-hover:scale-105"
