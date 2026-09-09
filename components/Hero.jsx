@@ -41,10 +41,18 @@ export default function Hero() {
   </p>
 </motion.div>
 
-{/* IEDC Kinetic Text Replaces Image */}
-<motion.div variants={item} className="w-full h-[400px] md:h-[600px] relative rounded-2xl overflow-hidden mb-12 md:mb-16 shadow-2xl bg-black">
-  <KineticHero />
+{{/* IEDC Image */}
+<motion.div variants={item} className="w-full h-[300px] md:h-[600px] relative rounded-2xl overflow-hidden mb-12 md:mb-16 shadow-2xl">
+  <div className="absolute inset-0 bg-gray-300 animate-pulse" />
+  <Image 
+    src="/heron.png" 
+    alt="IEDC at GPC Pala"
+    fill
+    className="object-cover relative z-10"
+    priority
+  />
 </motion.div>
+
 
 
         {/* Famous Quote */}
