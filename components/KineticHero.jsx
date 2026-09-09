@@ -26,8 +26,9 @@ export default function KineticHero() {
   }, [fonts]);
 
   return (
-    <section className="relative flex flex-col items-center justify-between w-full h-[80vh] min-h-[500px] bg-black text-white overflow-hidden py-10">
-      
+    // Change this line in KineticHero.jsx:
+<section className="relative flex flex-col items-center justify-between h-full w-full bg-black text-white overflow-hidden py-10">
+
       {/* Abstract Glowing Tech Background */}
       <div className="absolute inset-0 flex items-center justify-center opacity-30 z-0">
         <div className="w-[500px] h-[500px] bg-blue-600 rounded-full blur-[120px] mix-blend-screen"></div>
