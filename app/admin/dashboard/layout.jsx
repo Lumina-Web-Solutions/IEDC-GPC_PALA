@@ -35,7 +35,23 @@ export default function DashboardLayout({ children }) {
   }, []);
 
   const handleLogout = async () => {
+    try {
+      // 1. Record the logout event in your database using the fetched userEmail
+      if (userEmail && userEmail !== 'Not logged in' && userEmail !== 'Loading user...') {
+        await fetch('/api/logs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: userEmail, action: 'SECURE_LOGOUT' })
+        });
+      }
+    } catch (error) {
+      console.error('Audit Log Error:', error); // Fails gracefully if API isn't built yet
+    }
+
+    // 2. Sign out of Firebase
     await signOut(auth);
+    
+    // 3. Redirect to login
     router.push('/admin/login');
   };
 
