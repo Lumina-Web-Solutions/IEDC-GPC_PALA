@@ -64,6 +64,7 @@ export default function DashboardLayout({ children }) {
     { name: 'Media Gallery', path: '/admin/dashboard/gallery' },
     { name: 'Institutional Info', path: '/admin/dashboard/about' },
     { name: 'Messages & Feedback', path: '/admin/dashboard/messages' },
+    { name: 'System Audit Logs', path: '/admin/dashboard/logs' },
   ];
 
   return (
