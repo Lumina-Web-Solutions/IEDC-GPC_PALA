@@ -120,10 +120,16 @@ export default function AdminLogin() {
 
       </div>
 
-      {/* Global Footer Note */}
-      <div className="mt-8 text-center text-[10px] text-[#777777] font-bold uppercase tracking-wider z-10">
-        <p>Proprietary software • GPC Pala</p>
-      </div>
+      <div className="bg-white border border-slate-200 rounded p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
+        <div className="flex items-center gap-4">
+          <div className="h-10 w-10 bg-slate-100 rounded flex items-center justify-center border border-slate-200">
+             <img src="/LogoN.png" alt="Emblem" className="h-6 w-auto opacity-80" />
+          </div>
+          <div>
+            <p className="text-sm font-bold text-slate-800"> IEDC Website v1.0</p>
+            <p className="text-xs text-slate-500">Government Polytechnic College, Pala</p>
+          </div>
+        </div>
 
     </div>
   );
