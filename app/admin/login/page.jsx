@@ -128,15 +128,7 @@ export default function AdminLogin() {
       </div>
 
       
-        <div className="flex items-center gap-4">
-          <div className="h-10 w-10 bg-slate-100 rounded flex items-center justify-center border border-slate-200">
-             <img src="/LogoN.png" alt="Emblem" className="h-6 w-auto opacity-80" />
-          </div>
-          <div>
-            <p className="text-sm font-bold text-slate-800"> IEDC Website v1.0</p>
-            <p className="text-xs text-slate-500">Government Polytechnic College, Pala</p>
-          </div>
-          </div>
+        
       
         
 
