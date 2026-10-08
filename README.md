@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/Lumina-Web-Solutions/IEDC-GPC_PALA/664f881c932e5b75a054d11081b5861dc78ff2c4/public/LogoN.png" alt="IEDC GPC Pala Logo" height="45" style="vertical-align: middle;" /> IEDC GPC Pala - Official Web Portal
+# <img src="(https://raw.githubusercontent.com/Lumina-Web-Solutions/IEDC-GPC_PALA/664f881c932e5b75a054d11081b5861dc78ff2c4/public/LogoN.png)" alt="IEDC GPC Pala Logo" height="45" style="vertical-align: middle;" /> IEDC GPC Pala - Official Web Portal
 
 A dynamic, full-stack web application built for the Innovation and Entrepreneurship Development Centre at Government Polytechnic College, Pala. This platform features a modern, animated public landing page and a bespoke, secure Admin Dashboard for real-time content management.
 
