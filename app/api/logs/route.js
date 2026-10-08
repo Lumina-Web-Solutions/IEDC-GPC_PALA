@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { sql } from '@/lib/db';
 
 export async function POST(req) {
   try {
@@ -17,19 +17,16 @@ export async function POST(req) {
     }
 
     // Insert audit log
-    const result = await db.query(
-      `
-        INSERT INTO system_logs (user_email, action)
-        VALUES ($1, $2)
-        RETURNING *;
-      `,
-      [email, action]
-    );
+    const result = await sql`
+      INSERT INTO system_logs (user_email, action)
+      VALUES (${email}, ${action})
+      RETURNING *;
+    `;
 
     return NextResponse.json(
       {
         message: 'SUCCESS: Audit log recorded.',
-        log: result.rows[0],
+        log: result[0],
       },
       { status: 201 }
     );
@@ -48,16 +45,14 @@ export async function POST(req) {
 export async function GET() {
   try {
     // Fetch latest 100 logs
-    const result = await db.query(
-      `
-        SELECT *
-        FROM system_logs
-        ORDER BY created_at DESC
-        LIMIT 100;
-      `
-    );
+    const logs = await sql`
+      SELECT *
+      FROM system_logs
+      ORDER BY created_at DESC
+      LIMIT 100;
+    `;
 
-    return NextResponse.json(result.rows, { status: 200 });
+    return NextResponse.json(logs, { status: 200 });
   } catch (error) {
     console.error('Failed to fetch logs:', error);
 
