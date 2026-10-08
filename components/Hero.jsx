@@ -58,7 +58,7 @@ export default function Hero() {
             "Innovation distinguishes between a leader and a follower."
           </blockquote>
           <p className="mt-6 text-sm font-semibold tracking-[0.2em] text-gray-500 uppercase">
-            â€” Steve Jobs
+            -Steve Jobs
           </p>
         </motion.div>
       </motion.div>
