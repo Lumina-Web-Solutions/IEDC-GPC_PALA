@@ -50,60 +50,135 @@ export default function ManageAbout() {
     if (image) formData.append('image', image);
     else if (existingImage) formData.append('existingImage', existingImage);
 
-    const res = await fetch('/api/about', { method: 'PUT', body: formData });
-    if (res.ok) {
-      setMessage('About section updated successfully!');
-    } else {
-      setMessage('An error occurred.');
+    try {
+      const res = await fetch('/api/about', { method: 'PUT', body: formData });
+      if (res.ok) {
+        setMessage('SUCCESS: Institutional profile updated successfully.');
+      } else {
+        setMessage('ERROR: Failed to update institutional profile.');
+      }
+    } catch (error) {
+      setMessage('ERROR: System failure during transmission.');
     }
     setIsSubmitting(false);
   };
 
   return (
-    <div>
-      <h1 className="text-3xl font-serif text-gray-900 mb-8">Manage About Content</h1>
+    <div className="w-full text-[#333333] font-sans pb-10">
       
-      <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm max-w-3xl mb-12">
-        {message && <div className="mb-6 p-4 bg-gray-50 text-gray-900 text-sm rounded-lg border">{message}</div>}
+      {/* Official Page Header */}
+      <div className="border-b-2 border-[#003366] pb-2 mb-6">
+        <h1 className="text-xl md:text-2xl font-bold text-[#003366] uppercase m-0 tracking-wide">
+          Institutional Profile Configuration
+        </h1>
+        <p className="text-xs text-[#555555] font-bold uppercase mt-1">IEDC Portal • Core Mandate Settings</p>
+      </div>
+      
+      {/* Configuration Form */}
+      <div className="border border-[#CCCCCC] bg-white mb-10 shadow-sm relative max-w-4xl">
+        <div className="bg-[#003366] text-white px-5 py-3 text-sm font-bold uppercase tracking-wider flex justify-between items-center border-b-4 border-orange-500">
+          <span>MODIFY INSTITUTIONAL DETAILS</span>
+        </div>
+        
+        <div className="p-5 md:p-8">
+          {message && (
+            <div className={`mb-6 p-3 text-xs font-bold uppercase tracking-wide border ${message.includes('ERROR') ? 'bg-[#FFEEEE] border-[#CC0000] text-[#CC0000]' : 'bg-[#E5F6E5] border-[#008000] text-[#006600]'}`}>
+              {message}
+            </div>
+          )}
 
-        <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="flex flex-col">
-            <label className="text-sm font-semibold text-gray-700 mb-2">About IEDC Text</label>
-            <textarea rows="4" value={aboutText} onChange={(e) => setAboutText(e.target.value)} className="border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:border-gray-900 resize-none" required></textarea>
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            
+            {/* About Text Section */}
+            <div className="flex flex-col">
+              <label className="text-xs font-bold text-[#333333] uppercase mb-1.5">Official Profile / About IEDC <span className="text-red-500">*</span></label>
+              <textarea 
+                rows="4" 
+                value={aboutText} 
+                onChange={(e) => setAboutText(e.target.value)} 
+                className="w-full border border-[#CCCCCC] bg-[#F8F9FA] px-3 py-2.5 text-sm font-medium focus:outline-none focus:bg-white focus:border-[#003366] focus:ring-1 focus:ring-[#003366] resize-y transition-none leading-relaxed" 
+                required
+              ></textarea>
+            </div>
 
-          <div className="flex flex-col">
-            <label className="text-sm font-semibold text-gray-700 mb-2">Our Vision</label>
-            <textarea rows="3" value={vision} onChange={(e) => setVision(e.target.value)} className="border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:border-gray-900 resize-none" required></textarea>
-          </div>
+            {/* Vision Section */}
+            <div className="flex flex-col">
+              <label className="text-xs font-bold text-[#333333] uppercase mb-1.5">Institutional Vision <span className="text-red-500">*</span></label>
+              <textarea 
+                rows="3" 
+                value={vision} 
+                onChange={(e) => setVision(e.target.value)} 
+                className="w-full border border-[#CCCCCC] bg-[#F8F9FA] px-3 py-2.5 text-sm font-medium focus:outline-none focus:bg-white focus:border-[#003366] focus:ring-1 focus:ring-[#003366] resize-y transition-none leading-relaxed" 
+                required
+              ></textarea>
+            </div>
 
-          <div className="flex flex-col">
-            <label className="text-sm font-semibold text-gray-700 mb-2">Cover Image {existingImage && '(Leave blank to keep current)'}</label>
-            <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} className="border border-gray-300 rounded-lg p-2 text-gray-900" />
-          </div>
+            {/* Media Upload */}
+            <div className="flex flex-col md:w-1/2">
+              <label className="text-xs font-bold text-[#333333] uppercase mb-1.5">Cover Media Asset {existingImage && <span className="text-[#003366]">(Optional - Keeps Existing)</span>}</label>
+              <input 
+                type="file" 
+                accept="image/*" 
+                onChange={(e) => setImage(e.target.files[0])} 
+                className="w-full border border-[#CCCCCC] bg-white px-3 py-2 text-sm focus:outline-none focus:border-[#003366] file:mr-4 file:py-1 file:px-3 file:border-0 file:text-xs file:font-bold file:bg-[#E5E7EB] file:text-[#333333] hover:file:bg-[#CCCCCC] transition-none" 
+              />
+            </div>
 
-          {/* Dynamic Objectives List */}
-          <div className="pt-4 border-t border-gray-100">
-            <div className="flex justify-between items-center mb-4">
-              <label className="text-sm font-semibold text-gray-700">Objectives</label>
-              <button type="button" onClick={addObjective} className="text-xs font-bold text-gray-900 bg-gray-100 px-4 py-2 rounded-full">
-                + Add Objective
+            {/* Dynamic Objectives List */}
+            <div className="pt-6 border-t border-[#CCCCCC]">
+              <div className="flex justify-between items-center mb-4">
+                <label className="text-xs font-bold text-[#333333] uppercase">Core Objectives</label>
+                <button 
+                  type="button" 
+                  onClick={addObjective} 
+                  className="text-xs font-bold text-[#003366] bg-[#E5E7EB] hover:bg-[#CCCCCC] px-3 py-1.5 border border-[#BBBBBB] transition-none"
+                >
+                  + ADD OBJECTIVE ENTRY
+                </button>
+              </div>
+              
+              {objectives.map((obj, index) => (
+                <div key={index} className="flex gap-3 mb-4 items-start md:items-center bg-[#F8F9FA] p-3 border border-[#E5E7EB]">
+                  <span className="text-xs font-bold text-[#777777] mt-2.5 md:mt-0 w-6 text-center">{(index + 1).toString().padStart(2, '0')}</span>
+                  <input 
+                    type="text" 
+                    value={obj} 
+                    onChange={(e) => handleObjectiveChange(index, e.target.value)} 
+                    className="w-full border border-[#CCCCCC] bg-white px-3 py-2 text-sm focus:outline-none focus:border-[#003366]" 
+                    placeholder="Enter objective details..."
+                    required 
+                  />
+                  <button 
+                    type="button" 
+                    onClick={() => removeObjective(index)} 
+                    className="text-[#CC0000] font-bold text-sm bg-white border border-[#CC0000] px-3 py-1.5 hover:bg-[#FFEEEE] shrink-0"
+                    title="Remove Objective"
+                  >
+                    REMOVE
+                  </button>
+                </div>
+              ))}
+              
+              {objectives.length === 0 && (
+                <div className="p-4 bg-[#F8F9FA] border border-[#E5E7EB] text-center text-xs text-[#777777] italic">
+                  No objectives defined. Click "+ Add Objective Entry" to append institutional goals.
+                </div>
+              )}
+            </div>
+
+            <div className="pt-4 border-t border-[#CCCCCC]">
+              <button 
+                type="submit" 
+                disabled={isSubmitting} 
+                className="bg-[#003366] text-white font-bold text-sm tracking-wider uppercase px-8 py-3 border border-[#002244] hover:bg-orange-500 hover:border-orange-600 disabled:opacity-70 disabled:cursor-not-allowed transition-none shadow-sm"
+              >
+                {isSubmitting ? 'PROCESSING UPDATE...' : 'SAVE INSTITUTIONAL PROFILE'}
               </button>
             </div>
-            
-            {objectives.map((obj, index) => (
-              <div key={index} className="flex gap-4 mb-4">
-                <input type="text" value={obj} onChange={(e) => handleObjectiveChange(index, e.target.value)} className="border border-gray-300 rounded-lg p-3 w-full text-sm text-gray-900" required />
-                <button type="button" onClick={() => removeObjective(index)} className="text-red-500 font-bold shrink-0">✕</button>
-              </div>
-            ))}
-          </div>
-
-          <button type="submit" disabled={isSubmitting} className="bg-gray-900 text-white font-bold uppercase py-4 px-8 rounded-full hover:bg-black w-full">
-            {isSubmitting ? 'Saving Changes...' : 'Update About Section'}
-          </button>
-        </form>
+          </form>
+        </div>
       </div>
+
     </div>
   );
 }
