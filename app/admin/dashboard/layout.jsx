@@ -109,4 +109,46 @@ export default function DashboardLayout({ children }) {
                 <li key={item.name}>
                   <Link 
                     href={item.path}
-                    className={`block px-5 py-2.5 text-
+                    className={`block px-5 py-2.5 text-sm transition-none ${
+                      isActive 
+                        ? 'bg-[#004b93] text-white border-l-4 border-[#FF9933] font-bold' 
+                        : 'text-[#D0D0D0] hover:bg-[#002244] hover:text-white border-l-4 border-transparent font-normal'
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        {/* Sidebar Footer / System Actions */}
+        <div className="p-4 border-t border-[#002244] bg-[#001a33]">
+          <div className="mb-3">
+            <span className="block text-[10px] text-[#A0A0A0] font-bold uppercase">Logged In As</span>
+            <span className="block text-sm text-white font-bold">System Administrator</span>
+          </div>
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-white bg-[#CC0000] hover:bg-[#990000] border border-[#800000] transition-none"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            Logout Session
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 p-4 md:p-6 md:ml-64 w-full min-h-screen text-[#333333]">
+        {/* Official Document Wrapper Container */}
+        <div className="w-full max-w-7xl mx-auto bg-white border border-[#CCCCCC] p-5 md:p-8 shadow-sm min-h-[85vh]">
+          {children}
+        </div>
+      </div>
+      
+    </div>
+  );
+}
