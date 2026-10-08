@@ -1,7 +1,34 @@
 'use client';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
 export default function DashboardHome() {
+  const [currentTime, setCurrentTime] = useState('');
+  const [mounted, setMounted] = useState(false);
+
+  // Handle live clock
+  useEffect(() => {
+    setMounted(true);
+    const updateTime = () => {
+      const now = new Date();
+      const timeString = now.toLocaleString('en-IN', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      });
+      setCurrentTime(timeString.toUpperCase());
+    };
+    
+    updateTime(); // Initial call
+    const timer = setInterval(updateTime, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const modules = [
     { id: 'MOD-01', name: 'EVENTS MANAGEMENT', path: '/admin/dashboard/events', desc: 'Create, update, or remove institutional events and programs.' },
     { id: 'MOD-02', name: 'TEAM & EXECOM', path: '/admin/dashboard/team', desc: 'Manage executive committee members and faculty profiles.' },
@@ -15,6 +42,12 @@ export default function DashboardHome() {
   return (
     <div className="w-full text-[#333333]">
       
+      {/* Official Status Bar / Time */}
+      <div className="w-full mb-4 bg-[#F8F9FA] border border-[#CCCCCC] p-2 px-4 flex flex-col md:flex-row justify-between items-center text-[11px] font-bold text-[#555555]">
+        <span>GOVERNMENT POLYTECHNIC COLLEGE, PALA</span>
+        <span>{mounted ? currentTime : 'LOADING SYSTEM TIME...'}</span>
+      </div>
+
       {/* Official Page Header */}
       <div className="border-b-2 border-[#003366] pb-2 mb-4">
         <h1 className="text-xl font-bold text-[#003366] uppercase m-0">System Dashboard & Module Access</h1>
