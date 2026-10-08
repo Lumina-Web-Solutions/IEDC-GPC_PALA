@@ -41,13 +41,13 @@ export default function DashboardLayout({ children }) {
 
   const navItems = [
     { name: 'Dashboard Overview', path: '/admin/dashboard' },
-    { name: 'Events Management', path: '/admin/dashboard/events' },
+    { name: 'Events', path: '/admin/dashboard/events' },
     { name: 'Team & Execom', path: '/admin/dashboard/team' },
-    { name: 'Official Announcements', path: '/admin/dashboard/announcements' },
+    { name: 'Announcements', path: '/admin/dashboard/announcements' },
     { name: 'Achievements', path: '/admin/dashboard/achievements' },
     { name: 'Media Gallery', path: '/admin/dashboard/gallery' },
     { name: 'Institutional Info', path: '/admin/dashboard/about' },
-    { name: 'Public Communications', path: '/admin/dashboard/messages' },
+    { name: 'Messages & Feedback', path: '/admin/dashboard/messages' },
   ];
 
   return (
