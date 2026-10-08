@@ -129,7 +129,9 @@ export default function AdminLogin() {
             <p className="text-sm font-bold text-slate-800"> IEDC Website v1.0</p>
             <p className="text-xs text-slate-500">Government Polytechnic College, Pala</p>
           </div>
-        </div>
+          </div>
+         </div>
+        
 
     </div>
   );
