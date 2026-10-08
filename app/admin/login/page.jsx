@@ -19,6 +19,13 @@ export default function AdminLogin() {
     
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      
+      await fetch('/api/logs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, action: 'SECURE_LOGIN' })
+      });
+      
       router.push('/admin/dashboard'); // Redirect to dashboard on success
     } catch (err) {
       setError('Authentication failed. Verify credentials and try again.');
