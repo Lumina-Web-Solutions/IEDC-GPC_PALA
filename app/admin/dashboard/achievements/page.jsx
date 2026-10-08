@@ -75,9 +75,9 @@ export default function ManageAchievements() {
       {/* Official Page Header */}
       <div className="border-b-2 border-[#003366] pb-2 mb-6">
         <h1 className="text-xl md:text-2xl font-bold text-[#003366] uppercase m-0 tracking-wide">
-          Institutional Achievements Module
+          Achievements 
         </h1>
-        <p className="text-xs text-[#555555] font-bold uppercase mt-1">IEDC Portal • Official Milestones</p>
+        <p className="text-xs text-[#555555] font-bold uppercase mt-1">IEDC Portal • Achivements</p>
       </div>
       
       {/* Achievement Entry Form */}
