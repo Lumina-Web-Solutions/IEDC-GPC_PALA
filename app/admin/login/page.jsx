@@ -50,7 +50,13 @@ export default function AdminLogin() {
         {/* Decorative Top Border */}
         <div className="absolute top-0 left-0 w-full h-1 bg-gray-900"></div>
 
-        <div className="text-center mb-10">
+        <div className="text-center mb-10 flex flex-col items-center">
+          {/* IEDC Logo */}
+          <img 
+            src="/LogoN.png" 
+            alt="IEDC GPC Pala Logo" 
+            className="h-16 w-auto mb-6 drop-shadow-sm"
+          />
           <h1 className="text-4xl font-serif text-gray-900 mb-3">Admin Portal</h1>
           <p className="text-sm tracking-[0.2em] text-gray-400 uppercase">IEDC GPC Pala</p>
         </div>
