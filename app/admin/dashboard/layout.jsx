@@ -36,52 +36,54 @@ export default function DashboardLayout({ children }) {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F3F4F6] flex flex-col md:flex-row font-sans">
-      
-      {/* Mobile Header (Strict/Flat) */}
-      <div className="md:hidden bg-slate-900 text-white p-4 flex justify-between items-center z-50 sticky top-0 border-b-4 border-blue-600 shadow-md">
-        <div className="flex items-center gap-3">
+    <div 
+      className="min-h-screen bg-[#E5E7EB] flex flex-col md:flex-row" 
+      style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}
+    >
+      {/* Mobile Header (NIC Style) */}
+      <div className="md:hidden bg-[#003366] text-white p-3 flex justify-between items-center z-50 sticky top-0 border-b-4 border-[#FF9933] shadow-sm">
+        <div className="flex items-center gap-2">
           <img src="/LogoN.png" alt="IEDC Logo" className="h-8 w-auto brightness-0 invert" />
-          <div className="font-bold text-sm tracking-wider uppercase">Portal Admin</div>
+          <div className="font-bold text-sm">PORTAL ADMIN</div>
         </div>
         <button 
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-          className="p-1 focus:outline-none focus:ring-2 focus:ring-white border border-slate-700 bg-slate-800"
+          className="p-1 border border-[#004b93] bg-[#002244] focus:outline-none focus:ring-1 focus:ring-white"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {isMobileMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             )}
           </svg>
         </button>
       </div>
 
-      {/* Mobile Menu Dropdown (Standard Toggle, No Animation) */}
+      {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 top-[68px] bg-slate-900 z-40 overflow-y-auto border-t border-slate-800">
-          <nav className="divide-y divide-slate-800">
+        <div className="md:hidden fixed inset-0 top-[60px] bg-[#003366] z-40 overflow-y-auto border-t border-[#002244]">
+          <nav className="divide-y divide-[#002244]">
             {navItems.map((item) => (
               <Link 
                 key={item.name} 
                 href={item.path}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`block px-6 py-4 text-sm font-semibold tracking-wide uppercase transition-none ${
+                className={`block px-5 py-3 text-sm transition-none ${
                   pathname === item.path || (item.path === '/admin/dashboard' && pathname === '/admin/dashboard')
-                    ? 'bg-blue-600 text-white border-l-4 border-blue-400' 
-                    : 'text-slate-300 hover:bg-slate-800 hover:text-white border-l-4 border-transparent'
+                    ? 'bg-[#004b93] text-white border-l-4 border-[#FF9933] font-bold' 
+                    : 'text-[#E0E0E0] hover:bg-[#002244] hover:text-white border-l-4 border-transparent font-normal'
                 }`}
               >
                 {item.name}
               </Link>
             ))}
-            <div className="p-4 bg-slate-900 mt-4 border-t-2 border-slate-700">
+            <div className="p-4 bg-[#002244] mt-2 border-t border-[#001a33]">
               <button 
                 onClick={handleLogout}
-                className="w-full text-center px-4 py-3 text-sm font-bold tracking-widest uppercase bg-red-700 text-white hover:bg-red-800 focus:ring-2 focus:ring-red-500 transition-none"
+                className="w-full text-center px-4 py-2 text-sm font-bold bg-[#CC0000] text-white hover:bg-[#990000] border border-[#660000] transition-none"
               >
-                Terminate Session
+                Logout Session
               </button>
             </div>
           </nav>
@@ -89,63 +91,22 @@ export default function DashboardLayout({ children }) {
       )}
 
       {/* Desktop Sidebar (Institutional Theme) */}
-      <div className="hidden md:flex w-72 bg-slate-900 text-slate-100 flex-shrink-0 fixed h-screen z-10 flex-col border-r border-slate-700 shadow-xl">
+      <div className="hidden md:flex w-64 bg-[#003366] text-white flex-shrink-0 fixed h-screen z-10 flex-col border-r border-[#002244]">
         
         {/* Official Sidebar Header */}
-        <div className="p-6 border-b-4 border-blue-600 bg-slate-950">
-          <img src="/LogoN.png" alt="IEDC Logo" className="h-10 w-auto mb-4 brightness-0 invert" />
-          <h2 className="text-xl font-bold uppercase tracking-wide text-white">IEDC CMS Portal</h2>
-          <p className="text-xs text-slate-400 font-semibold tracking-widest uppercase mt-1">GPC Pala • Admin</p>
+        <div className="p-5 border-b-4 border-[#FF9933] bg-[#002244] flex flex-col items-center text-center">
+          <img src="/LogoN.png" alt="IEDC Logo" className="h-12 w-auto mb-3 brightness-0 invert" />
+          <h2 className="text-lg font-bold text-white m-0">IEDC GPC PALA</h2>
+          <p className="text-[11px] text-[#FF9933] font-bold mt-1">ADMINISTRATIVE PORTAL</p>
         </div>
         
-        {/* Navigation Links (Table-like List) */}
-        <nav className="flex-1 overflow-y-auto py-4 custom-scrollbar">
-          <ul className="space-y-1">
+        {/* Navigation Links */}
+        <nav className="flex-1 overflow-y-auto py-3 custom-scrollbar">
+          <ul className="space-y-0.5">
             {navItems.map((item) => {
               const isActive = pathname === item.path;
               return (
                 <li key={item.name}>
                   <Link 
                     href={item.path}
-                    className={`block px-6 py-3 text-sm font-semibold uppercase tracking-wider transition-none ${
-                      isActive 
-                        ? 'bg-slate-800 text-white border-l-4 border-blue-500 shadow-inner' 
-                        : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100 border-l-4 border-transparent'
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-
-        {/* Sidebar Footer / System Actions */}
-        <div className="p-4 border-t border-slate-700 bg-slate-950">
-          <div className="mb-4 px-2">
-            <span className="block text-[10px] uppercase text-slate-500 font-bold tracking-widest mb-1">Current User</span>
-            <span className="block text-sm text-slate-300 font-medium">System Administrator</span>
-          </div>
-          <button 
-            onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold tracking-wider uppercase bg-red-700 hover:bg-red-800 text-white border border-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 transition-none"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            Terminate Session
-          </button>
-        </div>
-      </div>
-
-      {/* Main Content Area */}
-      <div className="flex-1 p-4 md:p-10 md:ml-72 w-full min-h-screen">
-        <div className="w-full max-w-7xl mx-auto">
-          {children}
-        </div>
-      </div>
-      
-    </div>
-  );
-}
+                    className={`block px-5 py-2.5 text-
