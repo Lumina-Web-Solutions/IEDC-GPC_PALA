@@ -8,7 +8,7 @@ A dynamic, full-stack web application built for the Innovation and Entrepreneurs
 </a>
 
 ## 🚀 Live Demo
-[https://iedc-gpc-pala.vercel.app/]
+[![Live Demo](https://img.shields.io/badge/View_Live_Demo-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://iedc-gpc-pala.vercel.app/)
 
 ## 🛠 Tech Stack
 * **Frontend:** Next.js (App Router), React, Tailwind CSS
