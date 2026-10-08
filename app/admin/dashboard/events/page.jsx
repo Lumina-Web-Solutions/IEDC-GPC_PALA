@@ -112,7 +112,7 @@ export default function ManageEvents() {
         <h1 className="text-xl md:text-2xl font-bold text-[#003366] uppercase m-0 tracking-wide">
           Events Management Module
         </h1>
-        <p className="text-xs text-[#555555] font-bold uppercase mt-1">IEDC Portal • Official Records</p>
+        <p className="text-xs text-[#555555] font-bold uppercase mt-1">Innovation and Entrepreneurship Development Centre • GPC Pala</p>
       </div>
       
       {/* Event Entry Form */}
