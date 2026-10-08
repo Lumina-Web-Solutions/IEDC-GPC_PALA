@@ -27,10 +27,10 @@ export default function ManageAnnouncements() {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Delete this announcement?')) return;
+    if (!confirm('WARNING: Are you sure you want to permanently revoke this circular? This action cannot be undone.')) return;
     const res = await fetch(`/api/announcements?id=${id}`, { method: 'DELETE' });
     if (res.ok) {
-      setMessage('Announcement deleted.');
+      setMessage('SUCCESS: Circular record revoked and deleted.');
       fetchAnnouncements();
     }
   };
@@ -45,18 +45,22 @@ export default function ManageAnnouncements() {
     
     const method = editingId ? 'PUT' : 'POST';
 
-    const res = await fetch('/api/announcements', {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
+    try {
+      const res = await fetch('/api/announcements', {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
 
-    if (res.ok) {
-      setMessage(editingId ? 'Updated successfully!' : 'Added successfully!');
-      setTitle(''); setDetails(''); setDate(''); setEditingId(null);
-      fetchAnnouncements();
-    } else {
-      setMessage('An error occurred.');
+      if (res.ok) {
+        setMessage(editingId ? 'SUCCESS: Circular record modified.' : 'SUCCESS: New circular published officially.');
+        setTitle(''); setDetails(''); setDate(''); setEditingId(null);
+        fetchAnnouncements();
+      } else {
+        setMessage('ERROR: Failed to process request.');
+      }
+    } catch (error) {
+      setMessage('ERROR: System failure during transmission.');
     }
     setIsSubmitting(false);
   };
@@ -66,63 +70,149 @@ export default function ManageAnnouncements() {
   };
 
   return (
-    <div>
-      <h1 className="text-3xl font-serif text-gray-900 mb-8">Manage Announcements</h1>
+    <div className="w-full text-[#333333] font-sans pb-10">
       
-      <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm max-w-2xl mb-12">
-        <h2 className="text-lg font-bold tracking-widest text-gray-400 uppercase mb-6">
-          {editingId ? 'Edit Announcement' : 'Add New Announcement'}
-        </h2>
-        {message && <div className="mb-6 p-4 bg-gray-50 text-gray-900 text-sm rounded-lg border">{message}</div>}
+      {/* Official Page Header */}
+      <div className="border-b-2 border-[#003366] pb-2 mb-6">
+        <h1 className="text-xl md:text-2xl font-bold text-[#003366] uppercase m-0 tracking-wide">
+          Official Announcements Module
+        </h1>
+        <p className="text-xs text-[#555555] font-bold uppercase mt-1">IEDC Portal • Public Circulars</p>
+      </div>
+      
+      {/* Announcement Entry Form */}
+      <div className="border border-[#CCCCCC] bg-white mb-10 shadow-sm relative max-w-4xl">
+        <div className="bg-[#003366] text-white px-5 py-3 text-sm font-bold uppercase tracking-wider flex justify-between items-center border-b-4 border-orange-500">
+          <span>{editingId ? 'MODIFY CIRCULAR RECORD' : 'PUBLISH NEW CIRCULAR'}</span>
+          {editingId && (
+            <span className="bg-orange-500 text-white px-2 py-0.5 text-[10px] rounded-sm animate-pulse">
+              EDIT MODE ACTIVE
+            </span>
+          )}
+        </div>
+        
+        <div className="p-5 md:p-8">
+          {message && (
+            <div className={`mb-6 p-3 text-xs font-bold uppercase tracking-wide border ${message.includes('ERROR') ? 'bg-[#FFEEEE] border-[#CC0000] text-[#CC0000]' : 'bg-[#E5F6E5] border-[#008000] text-[#006600]'}`}>
+              {message}
+            </div>
+          )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="flex flex-col">
-            <label className="text-sm font-semibold text-gray-700 mb-2">Title</label>
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:border-gray-900" required />
-          </div>
-          
-          <div className="flex flex-col">
-            <label className="text-sm font-semibold text-gray-700 mb-2">Details</label>
-            <textarea rows="3" value={details} onChange={(e) => setDetails(e.target.value)} className="border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:border-gray-900 resize-none" required></textarea>
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="flex flex-col">
+              <label className="text-xs font-bold text-[#333333] uppercase mb-1.5">Notice Title <span className="text-red-500">*</span></label>
+              <input 
+                type="text" 
+                value={title} 
+                onChange={(e) => setTitle(e.target.value)} 
+                className="w-full border border-[#CCCCCC] bg-[#F8F9FA] px-3 py-2.5 text-sm font-semibold focus:outline-none focus:bg-white focus:border-[#003366] focus:ring-1 focus:ring-[#003366] transition-none" 
+                required 
+              />
+            </div>
+            
+            <div className="flex flex-col">
+              <label className="text-xs font-bold text-[#333333] uppercase mb-1.5">Official Details & Description <span className="text-red-500">*</span></label>
+              <textarea 
+                rows="4" 
+                value={details} 
+                onChange={(e) => setDetails(e.target.value)} 
+                className="w-full border border-[#CCCCCC] bg-[#F8F9FA] px-3 py-2.5 text-sm font-medium focus:outline-none focus:bg-white focus:border-[#003366] focus:ring-1 focus:ring-[#003366] resize-y transition-none leading-relaxed" 
+                required
+              ></textarea>
+            </div>
 
-          <div className="flex flex-col">
-            <label className="text-sm font-semibold text-gray-700 mb-2">Announcement Date</label>
-            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="border border-gray-300 rounded-lg p-3 text-gray-900 w-full md:w-1/2 focus:outline-none focus:border-gray-900" required />
-          </div>
-          
-          <div className="flex gap-4">
-            <button type="submit" disabled={isSubmitting} className="bg-gray-900 text-white font-bold uppercase py-4 px-8 rounded-full hover:bg-black w-full">
-              {isSubmitting ? 'Saving...' : (editingId ? 'Update' : 'Publish')}
-            </button>
-            {editingId && (
-              <button type="button" onClick={cancelEdit} className="bg-gray-200 text-gray-900 font-bold uppercase py-4 px-8 rounded-full hover:bg-gray-300">
-                Cancel
+            <div className="flex flex-col md:w-1/2">
+              <label className="text-xs font-bold text-[#333333] uppercase mb-1.5">Date of Issue <span className="text-red-500">*</span></label>
+              <input 
+                type="date" 
+                value={date} 
+                onChange={(e) => setDate(e.target.value)} 
+                className="w-full border border-[#CCCCCC] bg-[#F8F9FA] px-3 py-2.5 text-sm font-semibold focus:outline-none focus:bg-white focus:border-[#003366] focus:ring-1 focus:ring-[#003366] transition-none" 
+                required 
+              />
+            </div>
+            
+            <div className="flex flex-col md:flex-row gap-3 pt-4 border-t border-[#CCCCCC]">
+              <button 
+                type="submit" 
+                disabled={isSubmitting} 
+                className="bg-[#003366] text-white font-bold text-sm tracking-wider uppercase px-6 py-3 border border-[#002244] hover:bg-orange-500 hover:border-orange-600 disabled:opacity-70 disabled:cursor-not-allowed transition-none shadow-sm"
+              >
+                {isSubmitting ? 'PROCESSING...' : (editingId ? 'UPDATE CIRCULAR' : 'PUBLISH CIRCULAR')}
               </button>
-            )}
-          </div>
-        </form>
+              {editingId && (
+                <button 
+                  type="button" 
+                  onClick={cancelEdit} 
+                  className="bg-[#E5E7EB] text-[#333333] font-bold text-sm tracking-wider uppercase px-6 py-3 border border-[#CCCCCC] hover:bg-[#CCCCCC] transition-none"
+                >
+                  CANCEL EDIT
+                </button>
+              )}
+            </div>
+          </form>
+        </div>
       </div>
 
-      <h2 className="text-2xl font-serif text-gray-900 mb-6">Current Announcements</h2>
-      <div className="grid grid-cols-1 gap-4">
-        {announcements.map((item) => (
-          <div key={item.id} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <p className="text-xs font-bold text-gray-400 uppercase mb-1">
-                {new Date(item.announcement_date).toLocaleDateString()}
-              </p>
-              <h3 className="font-bold text-gray-900 text-lg mb-1">{item.title}</h3>
-              <p className="text-sm text-gray-500 line-clamp-1">{item.details}</p>
-            </div>
-            <div className="flex gap-4 shrink-0">
-              <button onClick={() => handleEdit(item)} className="text-blue-600 font-semibold text-sm hover:underline">Edit</button>
-              <button onClick={() => handleDelete(item.id)} className="text-red-600 font-semibold text-sm hover:underline">Delete</button>
-            </div>
-          </div>
-        ))}
-        {announcements.length === 0 && <p className="text-gray-500">No announcements found.</p>}
+      {/* Directory Table for Existing Announcements */}
+      <div className="border border-[#CCCCCC] shadow-sm overflow-x-auto bg-white">
+        <div className="bg-[#E5E7EB] border-b border-[#CCCCCC] px-4 py-3 text-sm font-bold text-[#003366] uppercase flex justify-between items-center">
+          <span>Registered Circulars Directory</span>
+          <span className="text-xs bg-white border border-[#CCCCCC] px-2 py-0.5 text-[#555555]">Total Records: {announcements.length}</span>
+        </div>
+        
+        <table className="w-full text-left border-collapse min-w-[600px]">
+          <thead className="bg-[#F8F9FA] border-b-2 border-[#CCCCCC]">
+            <tr>
+              <th className="p-3 text-xs font-bold text-[#555555] border-r border-[#CCCCCC] w-12 text-center">S.NO.</th>
+              <th className="p-3 text-xs font-bold text-[#555555] border-r border-[#CCCCCC] w-32">DATE ISSUED</th>
+              <th className="p-3 text-xs font-bold text-[#555555] border-r border-[#CCCCCC]">SUBJECT & DETAILS</th>
+              <th className="p-3 text-xs font-bold text-[#555555] w-40 text-center">ADMIN ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-[#CCCCCC]">
+            {announcements.length > 0 ? (
+              announcements.map((item, index) => (
+                <tr key={item.id} className="hover:bg-[#F0F5FA] transition-none">
+                  <td className="p-3 text-xs font-bold text-[#777777] border-r border-[#CCCCCC] text-center align-top">
+                    {String(index + 1).padStart(2, '0')}
+                  </td>
+                  <td className="p-3 text-xs font-bold text-[#333333] border-r border-[#CCCCCC] align-top">
+                    {new Date(item.announcement_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase()}
+                  </td>
+                  <td className="p-3 border-r border-[#CCCCCC] align-top">
+                    <div className="font-bold text-sm text-[#003366] mb-1">{item.title}</div>
+                    <div className="text-xs text-[#555555] leading-relaxed line-clamp-2 md:line-clamp-none">{item.details}</div>
+                  </td>
+                  <td className="p-3 text-center align-top">
+                    <div className="flex justify-center gap-2">
+                      <button 
+                        onClick={() => handleEdit(item)} 
+                        className="bg-[#E5E7EB] text-[#003366] text-[10px] font-bold uppercase px-3 py-1.5 border border-[#CCCCCC] hover:bg-[#003366] hover:text-white transition-colors"
+                      >
+                        MODIFY
+                      </button>
+                      <button 
+                        onClick={() => handleDelete(item.id)} 
+                        className="bg-white text-[#CC0000] text-[10px] font-bold uppercase px-3 py-1.5 border border-[#CC0000] hover:bg-[#CC0000] hover:text-white transition-colors"
+                      >
+                        REVOKE
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" className="p-6 text-center text-sm text-[#777777] italic bg-[#F8F9FA]">
+                  No public circulars found in the database.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
+
     </div>
   );
 }
