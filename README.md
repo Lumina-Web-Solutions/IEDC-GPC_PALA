@@ -2,7 +2,7 @@
 
 A dynamic, full-stack web application built for the Innovation and Entrepreneurship Development Centre at Government Polytechnic College, Pala. This platform features a modern, animated public landing page and a bespoke, secure Admin Dashboard for real-time content management.
 
-**Designed & Developed by [ Team Lumina ]**
+**Designed & Developed by Team Lumina**
 
 ## 🚀 Live Demo
 [https://iedc-gpc-pala.vercel.app/]
