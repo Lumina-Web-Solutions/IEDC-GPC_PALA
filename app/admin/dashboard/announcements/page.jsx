@@ -75,9 +75,9 @@ export default function ManageAnnouncements() {
       {/* Official Page Header */}
       <div className="border-b-2 border-[#003366] pb-2 mb-6">
         <h1 className="text-xl md:text-2xl font-bold text-[#003366] uppercase m-0 tracking-wide">
-          Official Announcements Module
+          Announcements
         </h1>
-        <p className="text-xs text-[#555555] font-bold uppercase mt-1">IEDC Portal • Public Circulars</p>
+        <p className="text-xs text-[#555555] font-bold uppercase mt-1">IEDC Portal • Announcements</p>
       </div>
       
       {/* Announcement Entry Form */}
