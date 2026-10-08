@@ -32,9 +32,3 @@ A dynamic, full-stack web application built for the Innovation and Entrepreneurs
 * **Serverless Image Uploads:** Custom API routes push images directly to a GitHub repository using the GitHub API, serving them instantly via raw links to bypass Vercel's read-only file system constraints.
 * **Admin Inbox:** Integrated messaging dashboard to read and manage public contact submissions.
 
-## 💻 Local Development Setup
-
-### 1. Clone the repository
-```bash
-git clone [https://github.com/your-username/your-repo-name.git](https://github.com/your-username/your-repo-name.git)
-cd your-repo-name
