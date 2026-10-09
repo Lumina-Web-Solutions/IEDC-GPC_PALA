@@ -98,3 +98,19 @@
 .gallery-tile:focus-visible,.button:focus-visible,.text-link:focus-visible{outline:2px solid #3b82f6;outline-offset:4px}
 @media(max-width:760px){.engineering-trace--one{left:-65px}.engineering-trace--two{right:-62px}.engineering-coordinate{font-size:8px}.engineering-coordinate--one{left:12px}.engineering-coordinate--two{right:12px}}
 @media(prefers-reduced-motion:reduce){.engineering-trace,.engineering-coordinate,.pillar-mark,.event-card,.person-card{transition:none!important}.engineering-details{display:none}}
+
+
+/* About section: restrained animated illustration of the real GPC Pala building */
+.about-campus-scene{aspect-ratio:1.38/1;min-height:0;background:linear-gradient(180deg,#dff4f7 0%,#c7edf0 50%,#a6dce1 100%);border:1px solid rgba(111,195,207,.45);box-shadow:0 20px 55px rgba(0,0,0,.2);isolation:isolate}
+.campus-sky{position:absolute;inset:0;overflow:hidden}
+.campus-sun{position:absolute;z-index:0;right:14%;top:12%;width:clamp(34px,5vw,58px);aspect-ratio:1;border-radius:50%;background:#ffd15a;box-shadow:0 0 0 10px rgba(255,209,90,.16),0 0 40px rgba(255,209,90,.25);animation:campusSunGlow 8s ease-in-out infinite}
+.campus-cloud{position:absolute;z-index:1;width:clamp(58px,8vw,94px);height:22px;border-radius:99px;background:rgba(255,255,255,.92);filter:drop-shadow(0 4px 7px rgba(53,127,143,.08));animation:campusCloudDrift 25s ease-in-out infinite alternate}
+.campus-cloud:before,.campus-cloud:after{content:"";position:absolute;bottom:5px;border-radius:50%;background:inherit}.campus-cloud:before{width:38%;aspect-ratio:1;left:16%}.campus-cloud:after{width:47%;aspect-ratio:1;left:43%}
+.campus-cloud--one{top:17%;left:8%}.campus-cloud--two{top:28%;right:7%;transform:scale(.68);animation-delay:-9s;animation-duration:31s}.campus-cloud--three{top:8%;left:47%;transform:scale(.52);animation-delay:-15s;animation-duration:35s}
+.campus-coordinates{position:absolute;z-index:1;top:16px;left:18px;color:rgba(25,91,106,.7);font:9px/1.5 var(--font-mono);letter-spacing:.12em}.campus-coordinates i{font-style:normal;color:#2589a0}.campus-crosshair{position:absolute;top:48%;right:7%;color:rgba(25,91,106,.46);font:22px/1 monospace;animation:campusCrosshair 6s ease-in-out infinite}
+.campus-building-art{z-index:2;object-fit:contain!important;object-position:center bottom;padding:0 0 1%;animation:campusBuildingFloat 9s ease-in-out infinite}
+.campus-grass{position:absolute;z-index:4;left:0;right:0;bottom:0;height:7%;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(60,139,102,.12))}.campus-grass-blade{position:absolute;bottom:0;width:2px;border-radius:100% 0;background:rgba(49,126,91,.66);transform-origin:bottom center;animation:campusGrassSway 2.2s ease-in-out infinite alternate}
+.campus-scene-edge{position:absolute;z-index:5;inset:0;pointer-events:none;border:1px solid rgba(255,255,255,.38);background:linear-gradient(135deg,rgba(255,255,255,.12),transparent 45%,rgba(19,86,102,.05))}
+@keyframes campusCloudDrift{from{translate:-8px 0}to{translate:17px 5px}}@keyframes campusSunGlow{0%,100%{transform:scale(1);opacity:.92}50%{transform:scale(1.06);opacity:1}}@keyframes campusBuildingFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}@keyframes campusGrassSway{from{transform:rotate(-13deg) scaleY(.88)}to{transform:rotate(14deg) scaleY(1)}}@keyframes campusCrosshair{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-5px);opacity:.75}}
+@media(max-width:760px){.about-campus-scene{aspect-ratio:1.12/1;min-height:270px}.campus-coordinates{top:12px;left:12px;font-size:7px}.campus-cloud--three{display:none}.campus-crosshair{right:4%}}
+@media(prefers-reduced-motion:reduce){.campus-sun,.campus-cloud,.campus-crosshair,.campus-building-art,.campus-grass-blade{animation:none!important}}
