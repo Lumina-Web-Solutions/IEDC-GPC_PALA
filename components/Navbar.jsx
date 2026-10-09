@@ -23,7 +23,7 @@ export default function Navbar() {
     <motion.header initial={{ y: -80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: .7, ease: [.22, 1, .36, 1] }} className={`site-nav ${scrolled ? 'site-nav--scrolled' : ''}`}>
       <nav className="nav-inner" aria-label="Main navigation">
         <Link href="/" className="brand" onClick={() => setOpen(false)}>
-          <span className="brand-mark"><Image src="/LogoN.png" alt="" fill priority sizes="48px" className="object-contain" /></span>
+          <span className="brand-mark"><Image src="/logo.png" alt="" fill priority sizes="48px" className="object-contain" /></span>
           <span className="brand-copy"><strong>IEDC</strong><span>GPC PALA</span></span>
         </Link>
         <div className="nav-links">
