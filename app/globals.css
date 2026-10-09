@@ -114,3 +114,14 @@
 @keyframes campusCloudDrift{from{translate:-8px 0}to{translate:17px 5px}}@keyframes campusSunGlow{0%,100%{transform:scale(1);opacity:.92}50%{transform:scale(1.06);opacity:1}}@keyframes campusBuildingFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}@keyframes campusGrassSway{from{transform:rotate(-13deg) scaleY(.88)}to{transform:rotate(14deg) scaleY(1)}}@keyframes campusCrosshair{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-5px);opacity:.75}}
 @media(max-width:760px){.about-campus-scene{aspect-ratio:1.12/1;min-height:270px}.campus-coordinates{top:12px;left:12px;font-size:7px}.campus-cloud--three{display:none}.campus-crosshair{right:4%}}
 @media(prefers-reduced-motion:reduce){.campus-sun,.campus-cloud,.campus-crosshair,.campus-building-art,.campus-grass-blade{animation:none!important}}
+
+
+/* Native campus trees, based on the real GPC Pala reference photo */
+.campus-trees{position:absolute;z-index:1;inset:0;overflow:hidden;pointer-events:none}
+.campus-tree{position:absolute;bottom:-1%;width:clamp(84px,17%,190px);height:88%;overflow:visible;filter:drop-shadow(0 4px 7px rgba(15,68,50,.1))}
+.campus-tree--left{left:-2%;transform-origin:50% 100%;animation:campusTreeSway 7s ease-in-out infinite alternate}
+.campus-tree--right{right:-3%;height:96%;width:clamp(95px,19%,215px);transform-origin:50% 100%;animation:campusTreeSway 8.5s ease-in-out -2s infinite alternate-reverse}
+.tree-trunk{fill:#6f5942}.tree-branch{fill:none;stroke:#6f5942;stroke-width:8;stroke-linecap:round}.tree-canopy{fill:#367e56}.tree-canopy ellipse:nth-child(3n){fill:#428c5d}.tree-canopy ellipse:nth-child(3n + 1){fill:#2e704d}.tree-canopy ellipse:nth-child(3n + 2){fill:#559967}
+@keyframes campusTreeSway{from{transform:rotate(-1.2deg)}to{transform:rotate(1.4deg)}}
+@media(max-width:760px){.campus-tree{width:clamp(58px,20%,105px);height:67%;opacity:.94}.campus-tree--left{left:-5%}.campus-tree--right{right:-7%;height:73%;width:clamp(68px,22%,118px)}}
+@media(prefers-reduced-motion:reduce){.campus-tree{animation:none!important}}
