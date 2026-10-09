@@ -1,67 +1,38 @@
 'use client';
-import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { motion, useReducedMotion } from 'framer-motion';
 
 export default function Hero() {
-  // Stagger animation variants for smooth reveals
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.2, delayChildren: 0.3 }
-    }
-  };
-
-  const item = {
-    hidden: { opacity: 0, y: 30 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
-  };
-
+  const reduceMotion = useReducedMotion();
   return (
-    <section className="relative pt-32 pb-20 px-6 md:px-12 bg-[#FAFAFA] min-h-screen flex flex-col justify-center">
-      <motion.div 
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="max-w-7xl mx-auto w-full"
-      >
-       {/* Inside Hero.jsx */}
-
-{/* Main Typography */}
-<motion.div variants={item} className="max-w-5xl mx-auto mb-8 md:mb-12 text-center px-2 md:px-0">
-  {/* Changed text-5xl to text-4xl for mobile, reduced bottom margin */}
-  <h1 className="text-4xl md:text-7xl lg:text-8xl font-serif text-gray-900 leading-[1.1] tracking-tight mb-4 md:mb-6">
-    Innovation and <br />
-    Entrepreneurship <br />
-    Development Centre.
-  </h1>
-  <p className="text-base md:text-xl text-gray-600 font-sans tracking-wide">
-    Government Polytechnic College, Pala
-  </p>
-</motion.div>
-
-{/* IEDC Image */}
-<motion.div variants={item} className="w-full h-[300px] md:h-[600px] relative rounded-2xl overflow-hidden mb-12 md:mb-16 shadow-2xl">
-  <div className="absolute inset-0 bg-gray-300 animate-pulse" />
-  <Image 
-    src="/hero-bg.png" 
-    alt="IEDC at GPC Pala"
-    fill
-    className="object-cover relative z-10"
-    priority
-  />
-</motion.div>
-
-        {/* Famous Quote */}
-        <motion.div variants={item} className="max-w-3xl mx-auto text-center">
-          <blockquote className="text-2xl md:text-3xl font-serif italic text-gray-800 leading-relaxed">
-            "Innovation distinguishes between a leader and a follower."
-          </blockquote>
-          <p className="mt-6 text-sm font-semibold tracking-[0.2em] text-gray-500 uppercase">
-            — Steve Jobs
-          </p>
+    <section className="hero" aria-labelledby="hero-title">
+      <div className="hero-grid" aria-hidden="true" />
+      <div className="hero-orb hero-orb--one" aria-hidden="true" />
+      <div className="hero-orb hero-orb--two" aria-hidden="true" />
+      <div className="hero-scanline" aria-hidden="true" />
+      <div className="hero-coordinate" aria-hidden="true">9°43&apos; N&nbsp; · &nbsp;76°41&apos; E</div>
+      <div className="hero-inner">
+        <motion.div className="hero-copy" initial={reduceMotion ? false : { opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .85, ease: [.22, 1, .36, 1] }}>
+          <div className="eyebrow eyebrow--light"><span className="status-dot" /> Innovation starts here <span className="eyebrow-line" /></div>
+          <h1 id="hero-title" className="hero-title-reveal">
+            <span className="hero-title-line">Ideas become</span>
+            <span className="hero-title-line hero-title-line--accent"><span className="hero-gradient">impact.</span><span className="hero-title-spark" aria-hidden="true">✳</span></span>
+          </h1>
+          <p className="hero-description">A campus for curious minds, bold experiments, and the next generation of makers at Government Polytechnic College, Pala.</p>
+          <div className="hero-actions"><a className="button button--primary" href="#about">Discover IEDC <span aria-hidden="true">↗</span></a><a className="button button--ghost" href="#events"><span className="play-icon">▶</span> Explore what we do</a></div>
+          <div className="hero-meta"><span>01 / INNOVATION</span><span>GOVERNMENT POLYTECHNIC COLLEGE · PALA</span></div>
         </motion.div>
-      </motion.div>
+        <motion.div className="hero-visual" initial={reduceMotion ? false : { opacity: 0, scale: .94, y: 30, rotate: 1.5 }} animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }} transition={{ duration: 1.25, delay: .18, ease: [.22, 1, .36, 1] }}>
+          <div className="hero-orbit hero-orbit--outer" aria-hidden="true" /><div className="hero-orbit hero-orbit--inner" aria-hidden="true" />
+          <div className="hero-image-frame"><Image src="/IEDC5.png" alt="Innovation and student activities at IEDC GPC Pala" fill priority sizes="(max-width: 900px) 100vw, 54vw" className="hero-image" /></div>
+          <div className="image-shade" />
+          <div className="visual-label"><span className="visual-label-dot" /><span>BUILD WHAT’S NEXT</span><span className="visual-label-index">IEDC / PALA</span></div>
+          <div className="floating-note"><span className="note-icon">✳</span><span><strong>Curiosity → Creation</strong><small>Think it. Build it. Share it.</small></span></div>
+          <div className="hero-corner hero-corner--tl" /><div className="hero-corner hero-corner--br" />
+          <div className="hero-side-index" aria-hidden="true"><span>IDEATE</span><i /><span>CREATE</span><i /><span>REPEAT</span></div>
+        </motion.div>
+      </div>
+      <a className="scroll-cue" href="#pillars"><span className="scroll-cue-line" /> Scroll to explore</a>
     </section>
   );
 }

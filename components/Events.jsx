@@ -1,110 +1,12 @@
 'use client';
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-
+import { motion } from 'framer-motion';
 export default function Events() {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // Fetch real events from NeonDB on component load
-  useEffect(() => {
-    async function fetchEvents() {
-      try {
-        const res = await fetch('/api/events');
-        if (res.ok) {
-          const data = await res.json();
-          setEvents(data);
-        }
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchEvents();
-  }, []);
-
-  // Format date to look like "Oct 15, 2026"
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
-  };
-
-  if (loading) {
-    return (
-      <section className="py-24 bg-white flex justify-center">
-        <div className="animate-pulse text-gray-400 font-bold tracking-widest uppercase">Loading Events...</div>
-      </section>
-    );
-  }
-
-  return (
-    <section id="events" className="py-24 bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 mb-12 flex justify-between items-end">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-sm font-bold tracking-[0.2em] text-gray-500 uppercase mb-2">Join Us</h2>
-          <h3 className="text-4xl md:text-5xl font-serif text-gray-900">Upcoming Events</h3>
-        </motion.div>
-      </div>
-
-      <div className="w-full flex overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-12 px-6 md:px-12 space-x-6 md:space-x-10">
-        {events.map((event, index) => (
-          <motion.div 
-            key={event.id}
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="snap-start shrink-0 w-[300px] md:w-[450px] flex flex-col group"
-          >
-            {/* Real Event Image */}
-            <div className="relative h-[250px] md:h-[300px] w-full rounded-2xl overflow-hidden mb-6 bg-gray-100">
-              <Image 
-                src={event.image_url || '/event-placeholder.jpg'} 
-                alt={event.title} 
-                fill 
-                className="object-cover transition-transform duration-700 group-hover:scale-105" 
-              />
-            </div>
-            
-            <p className="text-sm font-semibold tracking-widest text-blue-600 uppercase mb-2">
-              {formatDate(event.event_date)}
-            </p>
-            <h4 className="text-2xl font-serif text-gray-900 mb-3">{event.title}</h4>
-            <p className="text-gray-600 font-sans mb-6 line-clamp-3">
-              {event.description}
-            </p>
-
-            {/* Dynamic Button Links */}
-            {event.links && event.links.length > 0 && (
-              <div className="mt-auto flex flex-wrap gap-3">
-                {event.links.map((link, i) => (
-                  <Link 
-                    key={i} 
-                    href={link.url}
-                    target="_blank" // Opens the link in a new tab
-                    rel="noopener noreferrer"
-                    className="text-xs font-bold uppercase tracking-wider px-4 py-2 border border-gray-900 text-gray-900 rounded-full hover:bg-gray-900 hover:text-white transition-colors"
-                  >
-                    {link.label} {/* This is where the name you typed becomes the button text */}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </motion.div>
-        ))}
-        
-        {/* Fallback if no events exist yet */}
-        {events.length === 0 && (
-          <p className="text-gray-500 font-sans">No upcoming events at the moment. Stay tuned!</p>
-        )}
-      </div>
-    </section>
-  );
+  const [events, setEvents] = useState([]); const [loading, setLoading] = useState(true); const rail = useRef(null);
+  useEffect(() => { const controller = new AbortController(); (async () => { try { const res = await fetch('/api/events', { signal: controller.signal }); if (res.ok) setEvents(await res.json()); } catch (e) { if (e.name !== 'AbortError') console.error('Unable to load events', e); } finally { if (!controller.signal.aborted) setLoading(false); } })(); return () => controller.abort(); }, []);
+  const date = value => { const d = new Date(value); return Number.isNaN(d.getTime()) ? 'Date to be announced' : d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }); };
+  return <section id="events" className="section section--light events-section"><div className="section-shell"><div className="section-heading section-heading--split"><div><p className="eyebrow"><span className="eyebrow-number">03</span> Make it happen</p><h2>Good things are<br /><span className="text-gradient">in the making.</span></h2></div><div className="events-heading-side"><p className="section-intro">Meet, make, compete, and learn. Find your next reason to get involved.</p><div className="rail-controls"><button type="button" aria-label="Scroll events left" onClick={() => rail.current?.scrollBy({ left: -420, behavior: 'smooth' })}>←</button><button type="button" aria-label="Scroll events right" onClick={() => rail.current?.scrollBy({ left: 420, behavior: 'smooth' })}>→</button></div></div></div>
+    <div className="event-rail" ref={rail}>{events.map((event, i) => <motion.article className="event-card" key={event.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .15 }} transition={{ duration: .5, delay: i * .07 }}><div className="event-image">{event.image_url ? <Image src={event.image_url} alt={event.title || 'IEDC event'} fill sizes="(max-width: 700px) 82vw, 38vw" className="cover-image" /> : <div className="event-image-fallback"><span>IEDC / EVENTS</span><b>✳</b></div>}<span className="event-index">EVENT / {String(i + 1).padStart(2, '0')}</span></div><div className="event-details"><p className="event-date">{date(event.event_date)}</p><h3>{event.title}</h3><p className="event-description">{event.description}</p>{event.links?.length > 0 && <div className="event-links">{event.links.map((link, j) => <Link key={`${link.url}-${j}`} href={link.url} target="_blank" rel="noopener noreferrer" className="text-link">{link.label || 'Learn more'} <span>↗</span></Link>)}</div>}</div></motion.article>)}{!loading && events.length === 0 && <div className="empty-state"><span className="empty-state-icon">✳</span><h3>Something is in the works.</h3><p>No upcoming events are listed right now. Check back soon for what’s next.</p></div>}</div>{loading && <div className="loading-line"><span /> Loading upcoming events…</div>}</div></section>;
 }

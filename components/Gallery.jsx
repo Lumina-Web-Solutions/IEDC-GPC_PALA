@@ -1,69 +1,11 @@
 'use client';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
-
+import Image from 'next/image';
+import { AnimatePresence, motion } from 'framer-motion';
 export default function Gallery() {
-  const [photos, setPhotos] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchGallery() {
-      try {
-        const res = await fetch('/api/gallery');
-        if (res.ok) setPhotos(await res.json());
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchGallery();
-  }, []);
-
-  if (loading) {
-    return (
-      <section className="py-24 bg-[#FAFAFA] flex justify-center">
-        <div className="animate-pulse text-gray-400 font-bold tracking-widest uppercase">Loading Gallery...</div>
-      </section>
-    );
-  }
-
-  if (photos.length === 0) return null;
-
-  return (
-    <section className="py-24 bg-[#FAFAFA] px-6 md:px-12">
-      <div className="max-w-7xl mx-auto">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-12 text-center"
-        >
-          <h3 className="text-4xl md:text-5xl font-serif text-gray-900">Life at IEDC</h3>
-        </motion.div>
-
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-          {photos.map((photo, index) => (
-            <motion.div 
-              key={photo.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: (index % 6) * 0.05 }}
-              className="relative aspect-square rounded-xl overflow-hidden bg-gray-200 group shadow-sm"
-            >
-              <Image 
-                src={photo.image_url} 
-                alt={`Gallery image ${index + 1}`} 
-                fill 
-                className="object-cover transition-transform duration-500 group-hover:scale-110" 
-              />
-              <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+  const [photos, setPhotos] = useState([]); const [loading, setLoading] = useState(true); const [active, setActive] = useState(null);
+  useEffect(() => { const controller = new AbortController(); (async () => { try { const res = await fetch('/api/gallery', { signal: controller.signal }); if (res.ok) setPhotos(await res.json()); } catch (e) { if (e.name !== 'AbortError') console.error('Unable to load gallery', e); } finally { if (!controller.signal.aborted) setLoading(false); } })(); return () => controller.abort(); }, []);
+  useEffect(() => { if (!active) return; const onKey = e => { if (e.key === 'Escape') setActive(null); }; window.addEventListener('keydown', onKey); document.body.style.overflow = 'hidden'; return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = ''; }; }, [active]);
+  if (!loading && !photos.length) return null;
+  return <section id="gallery" className="section section--light gallery-section"><div className="section-shell"><div className="section-heading section-heading--split"><div><p className="eyebrow"><span className="eyebrow-number">06</span> The moments between</p><h2>Life at <span className="text-gradient">IEDC.</span></h2></div><p className="section-intro">The people, experiments, late ideas, and little wins that make this community what it is.</p></div><div className="gallery-grid">{photos.map((photo, i) => <motion.button type="button" key={photo.id} className={`gallery-tile gallery-tile--${i % 5}`} onClick={() => setActive(photo)} aria-label={`View gallery photo ${i + 1}`} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .1 }} transition={{ duration: .5, delay: (i % 5) * .05 }}><Image src={photo.image_url} alt={photo.title || `IEDC community moment ${i + 1}`} fill sizes="(max-width: 700px) 50vw, 33vw" className="cover-image" /><span className="gallery-hover">View image ↗</span><span className="gallery-index">FRAME / {String(i + 1).padStart(2, '0')}</span></motion.button>)}</div>{loading && <div className="loading-line"><span /> Loading the gallery…</div>}</div><AnimatePresence>{active && <motion.div className="lightbox" role="dialog" aria-modal="true" aria-label="Gallery image viewer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setActive(null)}><button className="lightbox-close" onClick={() => setActive(null)} aria-label="Close image viewer">×</button><motion.div className="lightbox-image" initial={{ scale: .96 }} animate={{ scale: 1 }} exit={{ scale: .96 }} onClick={e => e.stopPropagation()}><Image src={active.image_url} alt={active.title || 'IEDC gallery image'} fill sizes="90vw" className="cover-image" /></motion.div></motion.div>}</AnimatePresence></section>;
 }

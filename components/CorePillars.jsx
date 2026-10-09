@@ -1,43 +1,13 @@
 'use client';
 import { motion } from 'framer-motion';
-
+const pillars = [
+  { n: '01', title: 'Innovation', mark: '✳', text: 'We create space for fresh thinking through ideathons, challenges, and idea-led projects that turn curiosity into action.' },
+  { n: '02', title: 'Entrepreneurship', mark: '↗', text: 'We encourage student founders to explore opportunities, connect with mentors, and take the first steps toward building something real.' },
+  { n: '03', title: 'Technology', mark: '⌘', text: 'Workshops, competitions, hackathons, and conversations help our community learn the tools shaping tomorrow.' },
+];
 export default function CorePillars() {
-  const pillars = [
-    {
-      title: "Innovation",
-      text: "We regularly host ideathons and challenges to help kindle the fire of innovation and creativity in budding entrepreneurs on campus, and bring about a culture of idea-driven development in college."
-    },
-    {
-      title: "Entrepreneurship",
-      text: "We provide assistance to startup founders in the college, by collaborating with Kerala Startup Mission and CET TBI. We are also supported by our illustrious alumni and other leading entrepreneurs and innovators."
-    },
-    {
-      title: "Technology",
-      text: "We regularly conduct workshops, competitions, hackathons and panel discussions to delve into the latest technologies and processes that drive the industries of today."
-    }
-  ];
-
-  return (
-    <section className="py-24 bg-white px-6 md:px-12">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16">
-        {pillars.map((pillar, index) => (
-          <motion.div 
-            key={pillar.title}
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: index * 0.2, ease: "easeOut" }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="flex flex-col"
-          >
-            <h2 className="text-3xl font-serif text-gray-900 mb-6 border-b border-gray-300 pb-4">
-              {pillar.title}
-            </h2>
-            <p className="text-gray-600 font-sans leading-loose text-lg">
-              {pillar.text}
-            </p>
-          </motion.div>
-        ))}
-      </div>
-    </section>
-  );
+  return <section id="pillars" className="section section--light pillars-section"><div className="section-shell">
+    <div className="section-heading section-heading--split"><div><p className="eyebrow"><span className="eyebrow-number">01</span> What moves us</p><h2>Three forces.<br /><span className="text-gradient">One community.</span></h2></div><p className="section-intro">We bring ideas, people, and practical skills together to help innovation take root on campus.</p></div>
+    <div className="pillar-grid">{pillars.map((p, i) => <motion.article key={p.n} className="pillar-card" initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={{ duration: .6, delay: i * .1 }}><div className="pillar-card-top"><span>{p.n} / PILLAR</span><span className="pillar-mark">{p.mark}</span></div><h3>{p.title}</h3><p>{p.text}</p><a href="#about" className="text-link">Explore our approach <span>↗</span></a></motion.article>)}</div>
+  </div></section>;
 }

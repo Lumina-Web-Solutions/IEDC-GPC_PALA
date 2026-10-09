@@ -1,108 +1,115 @@
 'use client';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
+
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { motion, useReducedMotion } from 'framer-motion';
+
+function SocialLink({ href, label, children }) {
+  if (!href) return null;
+  return <a className="team-social-link" href={href} target="_blank" rel="noreferrer" aria-label={label}>{children}</a>;
+}
+
+function PersonCard({ member, index }) {
+  const reduceMotion = useReducedMotion();
+  const initials = member.name?.trim()?.split(/\s+/).slice(0, 2).map((part) => part[0]).join('') || 'I';
+
+  return (
+    <motion.article
+      className="person-card"
+      initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.55, delay: (index % 4) * 0.075, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={reduceMotion ? undefined : { y: -6 }}
+    >
+      <div className="person-portrait">
+        <span className="person-event-label">IEDC<br />GPC PALA</span>
+        <span className="person-role-label"><i /> {member.category === 'Faculty' ? 'Mentor' : 'Team'}</span>
+        <div className="person-blue-shape" aria-hidden="true" />
+        <div className="person-image">
+          {member.image_url ? (
+            <Image
+              src={member.image_url}
+              alt={member.name || 'IEDC team member'}
+              fill
+              sizes="(max-width: 520px) 90vw, (max-width: 760px) 44vw, (max-width: 1100px) 29vw, 23vw"
+              className="person-photo"
+            />
+          ) : (
+            <div className="person-initial" aria-label={`Initials ${initials}`}>{initials}</div>
+          )}
+        </div>
+        <span className="person-index">{String(index + 1).padStart(2, '0')}</span>
+      </div>
+      <div className="person-details">
+        <div className="person-details-top">
+          <div className="person-copy">
+            <h3>{member.name}</h3>
+            <p>{member.role || (member.category === 'Faculty' ? 'Faculty Mentor' : 'Executive Committee')}</p>
+          </div>
+          <div className="person-socials">
+            <SocialLink href={member.linkedin_url || member.linkedin} label={`${member.name} on LinkedIn`}>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.2 8.5H2.1V22h3.1V8.5ZM3.65 2a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6ZM22 13.7c0-4.1-2.2-6-5.2-6a4.5 4.5 0 0 0-4.1 2.2V8.5H9.6V22h3.1v-7.1c0-1.9.4-3.8 2.8-3.8s2.5 2.2 2.5 3.9V22H22v-8.3Z" /></svg>
+            </SocialLink>
+            <SocialLink href={member.github_url || member.github} label={`${member.name} on GitHub`}>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .9a11.1 11.1 0 0 0-3.5 21.6c.6.1.8-.3.8-.6v-2.1c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.2-1.6-1.2-1.6-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.7 2.1 3.5 1.5.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.5 0-1.2.4-2.1 1.1-2.9-.1-.3-.5-1.4.1-2.9 0 0 .9-.3 3 1.1a10.4 10.4 0 0 1 5.5 0c2.1-1.4 3-1.1 3-1.1.6 1.5.2 2.6.1 2.9.7.8 1.1 1.7 1.1 2.9 0 4.2-2.6 5.2-5.1 5.5.4.3.7 1 .7 1.9v2.8c0 .3.2.7.8.6A11.1 11.1 0 0 0 12 .9Z" /></svg>
+            </SocialLink>
+          </div>
+        </div>
+        <div className="person-accent-line" />
+      </div>
+    </motion.article>
+  );
+}
 
 export default function Team() {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch real team members from NeonDB
   useEffect(() => {
-    async function fetchTeam() {
+    const controller = new AbortController();
+    (async () => {
       try {
-        const res = await fetch('/api/team');
+        const res = await fetch('/api/team', { signal: controller.signal });
         if (res.ok) {
           const data = await res.json();
-          setMembers(data);
+          setMembers(Array.isArray(data) ? data : []);
         }
       } catch (error) {
-        console.error("Error fetching team:", error);
+        if (error.name !== 'AbortError') console.error('Unable to load team', error);
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
-    }
-    fetchTeam();
+    })();
+    return () => controller.abort();
   }, []);
 
-  if (loading) {
-    return (
-      <section className="py-24 bg-white flex justify-center">
-        <div className="animate-pulse text-gray-400 font-bold tracking-widest uppercase">Loading Team...</div>
-      </section>
-    );
-  }
-
-  // Split the fetched data into Faculty and Students based on the category we set in the admin portal
-  const faculty = members.filter(member => member.category === 'Faculty');
-  const students = members.filter(member => member.category === 'Student');
-
-  // Inside Team.jsx
-
-const ProfileCard = ({ member }) => (
-  <div className="flex flex-col items-center text-center group">
-    {/* Changed w-40 h-40 to w-28 h-28 for mobile */}
-    <div className="relative w-28 h-28 md:w-48 md:h-48 rounded-full overflow-hidden mb-4 md:mb-6 bg-gray-100 shadow-md">
-      <Image 
-        src={member.image_url || "/profile-placeholder.jpg"} 
-        alt={member.name} 
-        fill 
-        className="object-cover transition-transform duration-500 group-hover:scale-110" 
-      />
-    </div>
-    <h4 className="text-lg md:text-xl font-serif text-gray-900 mb-1 leading-tight">{member.name}</h4>
-    <p className="text-xs md:text-sm font-sans tracking-wide text-gray-500 uppercase">{member.role}</p>
-  </div>
-  );
+  const faculty = members.filter((member) => member.category === 'Faculty');
+  const students = members.filter((member) => member.category === 'Student');
 
   return (
-    <section id="team" className="py-24 bg-white px-6 md:px-12">
-      <div className="max-w-7xl mx-auto">
-        
-        {/* Faculty Section (Only shows if faculty exist) */}
-        {faculty.length > 0 && (
-          <div className="mb-24">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
-            >
-              <h3 className="text-4xl font-serif text-gray-900">Our Mentors</h3>
-            </motion.div>
-            
-            <div className="flex flex-wrap justify-center gap-12 md:gap-24">
-              {faculty.map((member, index) => (
-                <motion.div key={member.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }}>
-                  <ProfileCard member={member} />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Student Executive Committee Section */}
-        {students.length > 0 && (
+    <section id="team" className="section section--tint team-section team-section--profiles">
+      <div className="section-shell">
+        <div className="section-heading section-heading--split">
           <div>
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
-            >
-              <h3 className="text-4xl font-serif text-gray-900">Executive Committee</h3>
-            </motion.div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-16">
-              {students.map((member, index) => (
-                <motion.div key={member.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }}>
-                  <ProfileCard member={member} />
-                </motion.div>
-              ))}
-            </div>
+            <p className="eyebrow"><span className="eyebrow-number">07</span> The people behind it</p>
+            <h2>Good ideas need<br /><span className="text-gradient">good people.</span></h2>
           </div>
-        )}
+          <p className="section-intro">Meet the mentors and student leaders building a culture of innovation, collaboration, and making ideas real.</p>
+        </div>
 
+        {faculty.length > 0 && <div className="team-group">
+          <div className="team-group-heading"><h3>Our mentors</h3><span>{String(faculty.length).padStart(2, '0')} PEOPLE</span></div>
+          <div className="team-grid team-grid--faculty">{faculty.map((member, index) => <PersonCard member={member} index={index} key={member.id ?? `faculty-${member.name}-${index}`} />)}</div>
+        </div>}
+
+        {students.length > 0 && <div className="team-group">
+          <div className="team-group-heading"><h3>Executive committee</h3><span>{String(students.length).padStart(2, '0')} PEOPLE</span></div>
+          <div className="team-grid">{students.map((member, index) => <PersonCard member={member} index={index} key={member.id ?? `student-${member.name}-${index}`} />)}</div>
+        </div>}
+
+        {!loading && !members.length && <div className="empty-state"><h3>The team is coming into focus.</h3><p>Team profiles will appear here when available.</p></div>}
+        {loading && <div className="loading-line"><span /> Loading the team…</div>}
       </div>
     </section>
   );
