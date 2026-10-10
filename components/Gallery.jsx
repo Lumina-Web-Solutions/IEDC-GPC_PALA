@@ -8,7 +8,6 @@ export default function Gallery() {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
   const [expanded, setExpanded] = useState(false);
   const active = photos[activeIndex] || null;
 
@@ -33,7 +32,6 @@ export default function Gallery() {
   const closeViewer = useCallback(() => setExpanded(false), []);
   const move = useCallback((direction) => {
     if (!photos.length) return;
-    setDirection(direction > 0 ? 1 : -1);
     setActiveIndex((index) => (index + direction + photos.length) % photos.length);
   }, [photos.length]);
 
@@ -79,13 +77,13 @@ export default function Gallery() {
               return (
                 <motion.button
                   type="button"
-                  key={`${photo.id}-${offset}`}
+                  key={`${photo.id}-${offset}-${activeIndex}`}
                   className={`gallery-side-card gallery-side-card--${offset < 0 ? 'left' : 'right'} gallery-side-card--${Math.abs(offset)}`}
                   onClick={() => move(offset)}
                   aria-label={`Show ${photo.title || `photo ${((activeIndex + offset + photos.length) % photos.length) + 1}`}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45 }}
                 >
                   <Image src={photo.image_url} alt={photo.title || 'IEDC gallery moment'} fill sizes="(max-width: 700px) 28vw, 22vw" className="cover-image" />
                   <span className="gallery-side-shade" />
@@ -95,14 +93,14 @@ export default function Gallery() {
             })}
 
             {active && (
-              <AnimatePresence mode="sync" initial={false}>
+              <AnimatePresence mode="wait" initial={false}>
                 <motion.article
                   key={active.id || activeIndex}
                   className="gallery-feature-card"
-                  initial={{ opacity: 0, x: direction * 22, scale: .985 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  exit={{ opacity: 0, x: direction * -18, scale: .99 }}
-                  transition={{ type: 'spring', stiffness: 240, damping: 28, mass: 0.82 }}
+                  initial={{ opacity: 0, y: 16, scale: .97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: .98 }}
+                  transition={{ duration: .38, ease: [0.22, 1, 0.36, 1] }}
                   drag={photos.length > 1 ? 'x' : false}
                   dragConstraints={{ left: 0, right: 0 }}
                   dragElastic={0.14}
@@ -149,7 +147,7 @@ export default function Gallery() {
 
         <div className="gallery-pagination" aria-label="Choose gallery photo">
           {photos.slice(0, 9).map((photo, index) => (
-            <button key={photo.id || index} type="button" className={index === activeIndex ? 'is-active' : ''} onClick={() => { setDirection(index >= activeIndex ? 1 : -1); setActiveIndex(index); }} aria-label={`Go to photo ${index + 1}`} aria-current={index === activeIndex ? 'true' : undefined} />
+            <button key={photo.id || index} type="button" className={index === activeIndex ? 'is-active' : ''} onClick={() => setActiveIndex(index)} aria-label={`Go to photo ${index + 1}`} aria-current={index === activeIndex ? 'true' : undefined} />
           ))}
           {photos.length > 9 && <span>+{photos.length - 9}</span>}
         </div>
