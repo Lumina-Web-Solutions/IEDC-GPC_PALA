@@ -115,13 +115,15 @@ export default function ManageAbout() {
 
             {/* Media Upload */}
             <div className="flex flex-col md:w-1/2">
-              <label className="text-xs font-bold text-[#333333] uppercase mb-1.5">Cover Media Asset {existingImage && <span className="text-[#003366]">(Optional - Keeps Existing)</span>}</label>
+              <label className="text-xs font-bold text-[#333333] uppercase mb-1.5">About Image / Video {existingImage && <span className="text-[#003366]">(Optional - Keeps Existing)</span>}</label>
               <input 
                 type="file" 
-                accept="image/*" 
+                accept="image/*,video/mp4,video/webm,video/ogg,video/quicktime" 
                 onChange={(e) => setImage(e.target.files[0])} 
                 className="w-full border border-[#CCCCCC] bg-white px-3 py-2 text-sm focus:outline-none focus:border-[#003366] file:mr-4 file:py-1 file:px-3 file:border-0 file:text-xs file:font-bold file:bg-[#E5E7EB] file:text-[#333333] hover:file:bg-[#CCCCCC] transition-none" 
               />
+              <p className="mt-2 text-xs text-[#666666] leading-relaxed">Upload an image or a short MP4/WebM video. Videos play muted, loop automatically, and work inline on mobile.</p>
+              {image && <p className="mt-2 text-xs font-semibold text-[#003366]">Selected: {image.name}</p>}
             </div>
 
             {/* Dynamic Objectives List */}

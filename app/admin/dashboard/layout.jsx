@@ -7,7 +7,11 @@ import { useRouter, usePathname } from 'next/navigation';
 
 export default function DashboardLayout({ children }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [userEmail, setUserEmail] = useState('Loading user...');
+  const [userEmail, setUserEmail] = useState('');
+  
+  // SECURITY UPDATE: Added loading state to prevent dashboard flashing
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true); 
+  
   const router = useRouter();
   const pathname = usePathname();
 
@@ -20,23 +24,26 @@ export default function DashboardLayout({ children }) {
     }
   }, [isMobileMenuOpen]);
 
-  // Fetch the logged-in user's email from Firebase
+  // SECURITY UPDATE: Route Guard Enforcer
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
+        // User is logged in, allow access and show email
         setUserEmail(user.email);
+        setIsCheckingAuth(false);
       } else {
-        setUserEmail('Not logged in');
+        // No user found -> KICK THEM OUT IMMEDIATELY
+        // Using replace() instead of push() so they can't use the back button
+        router.replace('/admin/login'); 
       }
     });
     
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, []);
+  }, [router]);
 
   const handleLogout = async () => {
     try {
-      // 1. Record the logout event in your database using the fetched userEmail
       if (userEmail && userEmail !== 'Not logged in' && userEmail !== 'Loading user...') {
         await fetch('/api/logs', {
           method: 'POST',
@@ -45,13 +52,10 @@ export default function DashboardLayout({ children }) {
         });
       }
     } catch (error) {
-      console.error('Audit Log Error:', error); // Fails gracefully if API isn't built yet
+      console.error('Audit Log Error:', error);
     }
 
-    // 2. Sign out of Firebase
     await signOut(auth);
-    
-    // 3. Redirect to login
     router.push('/admin/login');
   };
 
@@ -66,6 +70,22 @@ export default function DashboardLayout({ children }) {
     { name: 'Messages & Feedback', path: '/admin/dashboard/messages' },
     { name: 'System Audit Logs', path: '/admin/dashboard/logs' },
   ];
+
+  // SECURITY UPDATE: Show a secure loading screen while verifying identity
+  // This physically prevents the children (dashboard pages) from rendering 
+  // into the DOM until Firebase confirms a valid session token exists.
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#E5E7EB] font-sans">
+        <div className="bg-white p-8 border border-[#CCCCCC] shadow-sm flex flex-col items-center">
+          <div className="w-10 h-10 border-4 border-[#E5E7EB] border-t-[#003366] rounded-full animate-spin mb-4"></div>
+          <p className="text-xs font-bold text-[#003366] tracking-widest uppercase">
+            Verifying Security Clearance...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans">
@@ -164,7 +184,6 @@ export default function DashboardLayout({ children }) {
         <div className="p-5 border-t border-white/10 bg-black/20">
           <div className="mb-4">
             <span className="block text-[10px] text-blue-300 font-bold uppercase tracking-wider mb-1">Active Session</span>
-            {/* User Email displayed here */}
             <span className="block text-sm text-white font-bold truncate" title={userEmail}>
               {userEmail}
             </span>
